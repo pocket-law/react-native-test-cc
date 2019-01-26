@@ -7,7 +7,7 @@ export default class TitleBar extends Component{
         this.state = {
             appname: 'Criminal Code of Canada',
             searchTerm: '',
-            isVisible: 'full-list' // 'full-list', 'categories', 'details', bookmarks
+            isVisible: 'full-list' // 'full-list', 'headers', 'search'
         }
     }
 
@@ -17,11 +17,11 @@ export default class TitleBar extends Component{
         console.log('was visible - ' + isVisible);
 
         if (isVisible == 'full-list') {
-            isVisible = 'categories';
-        } else if (isVisible == 'categories') {
+            isVisible = 'headers';
+        } else if (isVisible == 'headers') {
             isVisible = 'full-list';
         } else {
-            isVisible = 'full-list'
+            isVisible = 'headers'
         }
         console.log('now visible - ' + isVisible);
 
@@ -30,9 +30,23 @@ export default class TitleBar extends Component{
     }
 
     handleSearch() {
+        var isVisible = this.props.isVisible;
+
         var searchTerm = this.state.searchTerm;
 
         this.props.searchFor(searchTerm);
+
+        console.log('was visible - ' + isVisible);
+
+        if (isVisible != 'search') {
+            isVisible = 'search';
+        } else if (isVisible == 'search') {
+            isVisible = 'full-list';
+        } 
+        console.log('now visible - ' + isVisible);
+
+       // Providing `isVisible` variable to changeListView callback.
+        this.props.changeListView(isVisible);
     }
 
     componentWillReceiveProps(nextProps) {

@@ -1,49 +1,44 @@
-import React, {Component} from 'react';
-import {AppRegistry, Text, View, FlatList, StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, Text, View, FlatList, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 
-
-var jsonString = '';
-
-const mDictJson = require('./json/dict.json');
-
-var mStatute = require('./html/test.html');
+import Tts from 'react-native-tts';
 
 // This variable is used to avoid searching again when clicking the hamburger menu after a search
-// 2019 -- ??
 const lastSearch = '';
-
-var DomParser = require('react-native-html-parser').DOMParser;
 
 let SQLite = require('react-native-sqlite-storage');
 
 
 
-const renderItem=({item}) => (<Text>{item.term}</Text>); 
 
-export default class MainListView extends Component{
-    constructor(){
+export default class MainFlatList extends Component {
+    constructor() {
         super();
         this.state = {
-            termDataSource: [],
+            mainDataSource: [],
             resultsArray: [],
-            searchTerm:  ''
+            indexSet: 0,
+            searchTerm: ''
         };
 
-        let db = SQLite.openDatabase({name: 'c46.db', createFromLocation : "~c46.db", location: 'Library'}, this.openCB, this.errorCB);
+        let db = SQLite.openDatabase({ name: 'c46.db', createFromLocation: "~c46.db", location: 'Library' }, this.openCB, this.errorCB);
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM c46', [], (tx, results) => {
-                console.log("Query completed");
-      
+                console.log("MainFlatList query completed");
+
                 // Get rows with Web SQL Database spec compliance.
-      
+                var data = [];
+
                 var len = results.rows.length;
                 for (let i = 0; i < len; i++) {
-                  let row = results.rows.item(i);
-                  console.log(`Record: ${row.fulltext}`);
-                  this.setState({record: row});
+                    data.push(results.rows.item(i));
                 }
-              });
-          });
+
+                console.log("mainLen: " + data.length);
+                this.setState({ mainDataSource: data });
+
+            });
+        });
     }
 
     errorCB(err) {
@@ -58,37 +53,63 @@ export default class MainListView extends Component{
         console.log("Database OPENED");
     }
 
-    
+
 
     componentWillReceiveProps(nextProps) {
 
+        console.log("PROPS IN MAINFLATLIST!");
+
+        // Set index (from Header or Search item selection)
+        if (nextProps.mainIndexSet != '') {
+            console.log("PROPS are MainIndexSet!");
+            console.log("it is:" + nextProps.mainIndexSet);
+            this.state.indexSet = nextProps.mainIndexSet;
+            this.flatListRef.scrollToIndex({ animated: false, index: nextProps.mainIndexSet });
+        }
     }
 
-    componentDidMount(){
-        this.getInternalJson();
+    componentDidMount() {
+
 
     }
 
-    // TODO: remove this json jazz // use SQLite database
-    getInternalJson(){
-        this.setState({
-            termDataSource: mDictJson.terms
-        });
-
-        jsonString = JSON.stringify(mDictJson);
-    }
-
-
-
-    render(){
-        return(
+    render() {
+        return (
             <FlatList
-                data={this.state.termDataSource}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()} 
-                />
+                data={this.state.mainDataSource}
+                ref={(ref) => { this.flatListRef = ref; }}
+                renderItem={this.renderItem}
+                keyExtractor={(item, index) => index.toString()} />
         );
     }
+
+    renderItem = ({ item }) => (
+        <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
+            <View>
+                <View>
+                    <Text>{item.fulltext}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
+    );
+
+
+    readText(textToRead) {
+        console.log("TextToRead: " + textToRead);
+
+        // Set language (ideally not done every time in a real app)
+        Tts.setDefaultLanguage('en-US');
+
+        // Check TTS init status
+        // Stop any previously playing TTS
+        // Play the thing
+        Tts.getInitStatus().then(() => {
+            Tts.stop();
+            Tts.speak(textToRead);
+        });
+    }
+
+
 }
 
 
@@ -98,4 +119,4 @@ const styles = StyleSheet.create({
     }
 });
 
-AppRegistry.registerComponent('MainListView', () => MainListView);
+AppRegistry.registerComponent('MainFlatList', () => MainFlatList);

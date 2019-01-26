@@ -1,47 +1,50 @@
-import React, {Component} from 'react';
-import {AppRegistry, Text, View, StyleSheet, TouchableHighlight, Keyboard, BackHandler} from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, Text, View, StyleSheet, TouchableHighlight, Keyboard, BackHandler } from 'react-native';
 
-import MainListView from './components/MainActivity/ListView/MainFlatList';
-import CatsListView from './components/MainActivity/ListView/CatsListView';
+import MainFlatList from './components/MainActivity/ListView/MainFlatList';
+import HeadsFlatList from './components/MainActivity/ListView/HeadsFlatList';
+import SearchFlatList from './components/MainActivity/ListView/SearchFlatList';
 import TitleBar from './components/MainActivity/TitleBar/TitleBar';
 
-export default class MainActivity extends Component{
-    constructor(){
+export default class MainActivity extends Component {
+    constructor() {
         super();
         this.state = {
-            isVisible: 'full-list', // 'full-list', 'categories'
+            isVisible: 'full-list', // 'full-list', 'headers', 'search'
             searchTerm: '',
-            categorySet: ''
+            mainIndexSet: ''
         };
     }
 
     handleListView(isVisible) {
-        this.state.categorySet = ''
+        this.state.mainIndexSet = ''
 
-        if (isVisible == 'categories') {
-            this.setState({isVisible: 'categories'});
+        if (isVisible == 'headers') {
+            this.setState({ isVisible: 'headers' });
         } else if (isVisible == 'full-list') {
-            this.setState({isVisible: 'full-list'});
+            this.setState({ isVisible: 'full-list' });
+        } else if (isVisible == 'search') {
+            this.setState({ isVisible: 'search' });
         }
     }
 
     handleSearch(searchTerm) {
-        this.setState({searchTerm: searchTerm});
-        this.setState({categorySet: ''});
-        this.setState({isVisible: 'full-list'});
+        this.setState({ searchTerm: searchTerm });
+        this.setState({ mainIndexSet: '' });
+        this.setState({ isVisible: 'full-list' });
         Keyboard.dismiss();
         console.log("MainActivity search: " + searchTerm);
     }
 
-    handleCategoryChange(category) {
-        this.setState({categorySet: category});
-        this.setState({searchTerm: ''});
-        this.setState({isVisible: 'full-list'});
-        console.log("MainActivity category: " + category);
+    setMainIndex(setIndex) {
+        this.setState({ mainIndexSet: setIndex });
+        this.setState({ searchTerm: '' });
+        this.setState({ isVisible: 'full-list' });
+        console.log("Main setIndex: " + setIndex);
     }
 
     componentDidMount() {
-        console.log("BACKK! " + this.state.isVisible);
+        console.log("Main Activity Component Mounted" + this.state.isVisible);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
     }
 
@@ -52,23 +55,23 @@ export default class MainActivity extends Component{
 
     handleBack() {
         if (this.state.isVisible != 'full-list') {
-            this.setState({isVisible: 'full-list'});
+            this.setState({ isVisible: 'full-list' });
             return true; //avoid closing the app
         } else if (this.state.searchTerm != '') {
             this.handleSearch('');
             return true; //avoid closing the app
-        } else if (this.state.categorySet != '') {
-            this.state.categorySet = '';
-            this.setState({isVisible: 'categories'});
+        } else if (this.state.mainIndexSet != '') {
+            this.state.mainIndexSet = '';
+            this.setState({ isVisible: 'headers' });
             return true; //avoid closing the app
         }
 
-    return false; //close the app
+        return false; //close the app
     }
 
     //RENDER RENDER
-    render(){
-        return(
+    render() {
+        return (
             <View style={styles.container}>
                 <View style={styles.titleBar}>
                     <TitleBar
@@ -80,30 +83,41 @@ export default class MainActivity extends Component{
                 <View style={styles.bodyView}>
                     {this.state.isVisible == 'full-list' ?
                         <View>
-                            <MainListView
-                                categorySet={this.state.categorySet}
+                            <MainFlatList
+                                mainIndexSet={this.state.mainIndexSet}
                                 searchTerm={this.state.searchTerm} />
                         </View>
-                    :
+                        :
                         <View style={styles.noHeight}>
-                            <MainListView
-                                categorySet={this.state.categorySet}
+                            <MainFlatList
+                                mainIndexSet={this.state.mainIndexSet}
                                 searchTerm={this.state.searchTerm} />
                         </View>
                     }
-                    {this.state.isVisible == 'categories'  ?
+                    {this.state.isVisible == 'headers' ?
                         <View>
-                            <CatsListView
-                                changeCategory={this.handleCategoryChange.bind(this)} />
+                            <HeadsFlatList
+                                setMainFlatList={this.setMainIndex.bind(this)} />
                         </View>
-                    :
-                    <View style={styles.noHeight}>
-                        <CatsListView
-                            changeCategory={this.handleCategoryChange.bind(this)} />
-                    </View>
+                        :
+                        <View style={styles.noHeight}>
+                            <HeadsFlatList
+                                setMainFlatList={this.setMainIndex.bind(this)} />
+                        </View>
+                    }
+                    {this.state.isVisible == 'search' ?
+                        <View>
+                            <SearchFlatList
+                                changeCategory={this.setMainIndex.bind(this)} />
+                        </View>
+                        :
+                        <View style={styles.noHeight}>
+                            <SearchFlatList
+                                changeCategory={this.setMainIndex.bind(this)} />
+                        </View>
                     }
                 </View>
-                <View style={styles.footer}/>
+                <View style={styles.footer} />
             </View>
         );
     }
@@ -112,7 +126,7 @@ export default class MainActivity extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection:'column'
+        flexDirection: 'column'
     },
 
     bodyView: {
