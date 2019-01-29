@@ -71,6 +71,11 @@ export default class MainActivity extends Component {
 
     //RENDER RENDER
     render() {
+
+        if (this.state.searchTerm != "") {
+            console.log("MainActivity RENDER search: " + this.state.searchTerm);
+        }
+
         return (
             <View style={styles.container}>
                 <View style={styles.titleBar}>
@@ -84,36 +89,34 @@ export default class MainActivity extends Component {
                     {this.state.isVisible == 'full-list' ?
                         <View>
                             <MainFlatList
-                                mainIndexSet={this.state.mainIndexSet}
-                                searchTerm={this.state.searchTerm} />
+                                mainIndexSet={this.state.mainIndexSet} />
                         </View>
                         :
                         <View style={styles.noHeight}>
                             <MainFlatList
-                                mainIndexSet={this.state.mainIndexSet}
-                                searchTerm={this.state.searchTerm} />
+                                mainIndexSet={this.state.mainIndexSet} />
                         </View>
                     }
                     {this.state.isVisible == 'headers' ?
                         <View>
                             <HeadsFlatList
-                                setMainFlatList={this.setMainIndex.bind(this)} />
+                                searchTerm={this.state.searchTerm} />
                         </View>
                         :
                         <View style={styles.noHeight}>
                             <HeadsFlatList
-                                setMainFlatList={this.setMainIndex.bind(this)} />
+                                searchTerm={this.state.searchTerm} />
                         </View>
                     }
                     {this.state.isVisible == 'search' ?
                         <View>
                             <SearchFlatList
-                                changeCategory={this.setMainIndex.bind(this)} />
+                                searchTerm={this.state.searchTerm} />
                         </View>
                         :
                         <View style={styles.noHeight}>
-                            <SearchFlatList
-                                changeCategory={this.setMainIndex.bind(this)} />
+                            <SearchFlatList 
+                                searchTerm={this.state.searchTerm} />
                         </View>
                     }
                 </View>

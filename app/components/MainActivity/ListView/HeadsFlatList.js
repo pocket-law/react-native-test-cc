@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View, FlatList, StyleSheet, TouchableHighlight } from 'react-native';
 
-import HeadsItem from './ListItems/HeadsItem';
-
-
-let SQLite = require('react-native-sqlite-storage');
+import Database from '../Database/Database'
 
 
 export default class HeadsFlatList extends Component {
@@ -15,7 +12,8 @@ export default class HeadsFlatList extends Component {
             headerIndex: ''
         };
 
-        let db = SQLite.openDatabase({ name: 'c46.db', createFromLocation: "~c46.db", location: 'Library' }, this.openCB, this.errorCB);
+        var db = Database.getConnection();
+        
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM c46 WHERE type = 0', [], (tx, results) => {
                 console.log("Headers query completed");
@@ -44,13 +42,11 @@ export default class HeadsFlatList extends Component {
     handlePress(item) {
         console.log("handlePress: " + item._id);
 
-        this.state.headerIndex = item._id;
-        this.props.setMainFlatList(item._id);
+        // Subtract 1 to account for 0-index but no 0-id
+        this.state.headerIndex = item._id - 1;
+        this.props.setMainFlatList(item._id - 1);
     }
 
-    // _renderItem = () => (
-    //     <HeadsItem/>
-    // );
 
     _renderItem = ({ item }) => (
         <TouchableHighlight onPress={() => this.handlePress(item)}>
