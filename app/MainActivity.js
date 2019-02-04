@@ -37,6 +37,7 @@ export default class MainActivity extends Component {
     }
 
     setMainIndex(setIndex) {
+        console.log("YOOOWOA! " + setIndex);
         this.setState({ mainIndexSet: setIndex });
         this.setState({ searchTerm: '' });
         this.setState({ isVisible: 'full-list' });
@@ -44,7 +45,7 @@ export default class MainActivity extends Component {
     }
 
     componentDidMount() {
-        console.log("Main Activity Component Mounted" + this.state.isVisible);
+        console.log("Main Activity Component Mounted: " + this.state.isVisible);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
     }
 
@@ -100,23 +101,25 @@ export default class MainActivity extends Component {
                     {this.state.isVisible == 'headers' ?
                         <View>
                             <HeadsFlatList
-                                searchTerm={this.state.searchTerm} />
+                                setMainIndex={this.setMainIndex.bind(this)} />
                         </View>
                         :
                         <View style={styles.noHeight}>
                             <HeadsFlatList
-                                searchTerm={this.state.searchTerm} />
+                                setMainIndex={this.setMainIndex.bind(this)} />
                         </View>
                     }
                     {this.state.isVisible == 'search' ?
                         <View>
                             <SearchFlatList
-                                searchTerm={this.state.searchTerm} />
+                                searchTerm={this.state.searchTerm}
+                                setMainIndex={this.setMainIndex.bind(this)} />
                         </View>
                         :
                         <View style={styles.noHeight}>
                             <SearchFlatList 
-                                searchTerm={this.state.searchTerm} />
+                                searchTerm={this.state.searchTerm} 
+                                setMainIndex={this.setMainIndex.bind(this)} />
                         </View>
                     }
                 </View>

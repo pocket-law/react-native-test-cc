@@ -34,11 +34,10 @@ export default class TitleBar extends Component{
 
         var searchTerm = this.state.searchTerm;
 
-        this.props.searchFor(searchTerm);
-
         console.log('was visible - ' + isVisible);
 
         if (isVisible != 'search') {
+            this.props.searchFor(searchTerm);
             isVisible = 'search';
         } else if (isVisible == 'search') {
             isVisible = 'full-list';
