@@ -6,6 +6,8 @@ import HeadsFlatList from './components/MainActivity/ListView/HeadsFlatList';
 import SearchFlatList from './components/MainActivity/ListView/SearchFlatList';
 import TitleBar from './components/MainActivity/TitleBar/TitleBar';
 
+import TextSpeechUtil from './components/MainActivity/Utils/TextSpeechUtil';
+
 export default class MainActivity extends Component {
     constructor() {
         super();
@@ -47,6 +49,8 @@ export default class MainActivity extends Component {
     componentDidMount() {
         console.log("Main Activity Component Mounted: " + this.state.isVisible);
         BackHandler.addEventListener('hardwareBackPress', this.handleBack.bind(this));
+
+        TextSpeechUtil.setTTSLanguage("ENGLISH"); // ENGLISH or FRENCH
     }
 
     componentWillUnmount() {

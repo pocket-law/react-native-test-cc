@@ -3,6 +3,8 @@ import { AppRegistry, Text, View, FlatList, StyleSheet, TouchableHighlight } fro
 
 import Database from '../Utils/Database'
 
+import SearchItem from './ListItems/SearchItem';
+
 
 // This variable is used to avoid searching again when clicking the hamburger menu after a search
 // 2019 ??
@@ -58,12 +60,10 @@ export default class SearchFlatList extends Component {
         console.log("SearchList handlePress: " + item._id);
 
         // Subtract 1 to account for 0-index but no 0-id
-        this.state.searchItemIndex = item._id - 1;
         this.props.setMainIndex(item._id - 1);
     }
 
     componentDidMount() {
-
 
     }
 
@@ -74,35 +74,16 @@ export default class SearchFlatList extends Component {
                 style={styles.flatList}
                 data={this.state.searchDataSource}
                 renderItem={this._renderItem}
-                keyExtractor={(item, index) => index.toString()}
-            />
+                keyExtractor={(item, index) => index.toString()} />
         );
     }
 
     _renderItem = ({ item }) => {
-        if (item.section != "LongTitle") {
-            return (
-                <TouchableHighlight onPress={() => this.handlePress(item)}>
-                    <View style={styles.searchItem}>
-                        <View style={styles.content}>
-                            <View style={styles.itemLocation}>
-                                <Text style={styles.inSection}>In Section:</Text>
-                                <Text style={styles.pinpoint}>{item.section}</Text>
-                            </View>
-                            <View style={styles.vertBreak}></View>
-                            <View style={styles.fullTextView}>
-                                <Text>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                        <View style={styles.itemBreak}></View>
-                    </View>
-                </TouchableHighlight>
-            )
-        } else {
-            return (
-                <View></View>
-            )
-        }
+        return (
+            <SearchItem
+                nextItem={item}
+                handlePress={this.handlePress.bind(this)} />
+        )
     }
 }
 
@@ -151,4 +132,4 @@ const styles = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent('MainFlatList', () => MainFlatList);
+AppRegistry.registerComponent('SearchFlatList', () => SearchFlatList);

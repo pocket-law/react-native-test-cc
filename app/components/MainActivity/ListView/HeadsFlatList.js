@@ -3,6 +3,8 @@ import { AppRegistry, Text, View, FlatList, StyleSheet, TouchableHighlight } fro
 
 import Database from '../Utils/Database'
 
+import HeadsItem from './ListItems/HeadsItem';
+
 
 export default class HeadsFlatList extends Component {
     constructor(props) {
@@ -43,67 +45,15 @@ export default class HeadsFlatList extends Component {
         console.log("HeadsList handlePress: " + item._id);
 
         // Subtract 1 to account for 0-index but no 0-id
-        this.state.headerIndex = item._id - 1;
         this.props.setMainIndex(item._id - 1);
     }
 
     _renderItem = ({ item }) => {
-        switch (item.pinpoint) {
-            case 'level1':
-                // console.log("Case 0");
-                return (
-                    <TouchableHighlight onPress={() => this.handlePress(item)}>
-                        <View style={styles.row1}>
-                            <View>
-                                <Text style={styles.categoryText}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                );
-            case 'level2':
-                // console.log("Case 1");
-                return (
-                    <TouchableHighlight onPress={() => this.handlePress(item)}>
-                        <View style={styles.row2}>
-                            <View>
-                                <Text style={styles.categoryText}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                );
-            case 'level3':
-                // console.log("Case 0");
-                return (
-                    <TouchableHighlight onPress={() => this.handlePress(item)}>
-                        <View style={styles.row3}>
-                            <View>
-                                <Text style={styles.categoryText}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                );
-            case 'level4':
-                // console.log("Case 1");
-                return (
-                    <TouchableHighlight onPress={() => this.handlePress(item)}>
-                        <View style={styles.row4}>
-                            <View>
-                                <Text style={styles.categoryText}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                );
-            default:
-                return (
-                    <TouchableHighlight onPress={() => this.handlePress(item)}>
-                        <View style={styles.row1}>
-                            <View>
-                                <Text style={styles.categoryText}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableHighlight>
-                );
-        }
+        return (
+            <HeadsItem
+                nextItem={item} 
+                handlePress={this.handlePress.bind(this)}/>
+        )
     };
 
 
@@ -112,6 +62,7 @@ export default class HeadsFlatList extends Component {
             <FlatList
                 data={this.state.headsDataSource}
                 renderItem={this._renderItem}
+                initialNumToRender={15}
                 keyExtractor={(item, index) => index.toString()} />
         );
     }

@@ -4,7 +4,7 @@ import { AppRegistry, Text, View, FlatList, StyleSheet, TouchableHighlight, Touc
 
 import Database from '../Utils/Database'
 
-import { MainItem } from './ListItems/MainItem';
+import MainItem from './ListItems/MainItem';
 
 // This variable is used to avoid searching again when clicking the hamburger menu after a search
 const lastSearch = '';
@@ -41,25 +41,21 @@ export default class MainFlatList extends Component {
 
             });
         });
+
+        
+
     }
 
     componentWillReceiveProps(nextProps) {
 
-        console.log("PROPS IN MAINFLATLIST!");
-
-        // Set index (from Header or Search item selection)
+        // Set index (from Header or selected Search result)
         if (nextProps.mainIndexSet != '') {
-            console.log("PROPS are MainIndexSet!");
-            console.log("it is:" + nextProps.mainIndexSet);
+            console.log("PROPS in MainFlatList are MainIndexSet: " + nextProps.mainIndexSet);
             this.state.indexSet = nextProps.mainIndexSet;
             this.flatListRef.scrollToIndex({ animated: false, index: nextProps.mainIndexSet });
         }
     }
 
-    componentDidMount() {
-
-
-    }
 
     render() {
         return (
@@ -68,19 +64,20 @@ export default class MainFlatList extends Component {
                 ref={(ref) => { this.flatListRef = ref; }}
                 renderItem={this._renderItem}
                 keyExtractor={(item, index) => index.toString()}
-                // initialNumToRender={1000}
+                initialNumToRender={30}
                 getItemLayout={this._getItemLayout}
+                extraData={this.props}
                 removeClippedSubviews={false} />
         );
     }
 
-    // _getItemLayout = (data, index) => (
-    //     { 
-    //         length: 50, 
-    //         offset: 50 * index, 
-    //         index,
-    //     }
-    // )
+    _getItemLayout = (data, index) => (
+        { 
+            length: 50, 
+            offset: 50 * index, 
+            index,
+        }
+    )
 
     _renderItem = ({ item }) => {
         return (

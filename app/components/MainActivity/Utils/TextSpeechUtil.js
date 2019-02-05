@@ -4,12 +4,17 @@ import Tts from 'react-native-tts';
 
 class TextSpeechUtil  {
 
+    setTTSLanguage(language) {
+        if (language == "ENGLISH") {
+            Tts.setDefaultLanguage('en-US');
+        } else if (language == "FRENCH") {
+            Tts.setDefaultLanguage('fr-CA');
+        } else {
+            Tts.setDefaultLanguage('en-US');
+        }
+    }
+
     readText(textToRead) {
-        console.log("TextSpeechUtil TextToRead: " + textToRead);
-    
-        // Set language (ideally not done every time in a real app)
-        Tts.setDefaultLanguage('en-US');
-    
         // Check TTS init status
         // Stop any previously playing TTS
         // Play the thing

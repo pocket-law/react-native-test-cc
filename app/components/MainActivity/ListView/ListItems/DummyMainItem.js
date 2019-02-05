@@ -1,14 +1,18 @@
 import React, { PureComponent } from 'react';
 import { AppRegistry, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
+// TODO: remove, not necessary for the dummy item
 import TextSpeechUtil from '../../Utils/TextSpeechUtil';
 
+import {viewSize} from '../../Utils/ViewSizeObj.js'
 
 
-export default class MainItem extends PureComponent {
+
+export default class DummyMainItem extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            ViewSizingArray: [],
         };
     }
 
@@ -16,13 +20,13 @@ export default class MainItem extends PureComponent {
         TextSpeechUtil.readText(textToRead);
     }
 
-    find_dimesions(layout) {
-        const { x, y, width, height } = layout;
+    find_dimesions(layout){
+        const {x, y, width, height} = layout;
         console.log("x: " + x);
         console.log("y: " + y);
         console.log("width: " + width);
         console.log("height: " + height);
-    }
+      }
 
     render() {
         const item = this.props.nextItem;
