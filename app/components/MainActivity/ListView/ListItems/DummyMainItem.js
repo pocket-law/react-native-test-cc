@@ -1,307 +1,345 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { AppRegistry, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
-// TODO: remove, not necessary for the dummy item
-import TextSpeechUtil from '../../Utils/TextSpeechUtil';
+const heightsList = [];
 
-import {viewSize} from '../../Utils/ViewSizeObj.js'
-
-
-
-export default class DummyMainItem extends PureComponent {
+export default class DummyMainItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ViewSizingArray: [],
+            codeData: null,
+            currentItem: -1,
         };
     }
 
-    readText(textToRead) {
-        TextSpeechUtil.readText(textToRead);
+    componentWillReceiveProps(nextProps) {
+        // Get data from MainFlatList
+        if (nextProps.codeData != '') {
+            console.log("PROPS in DummyMainItem are codeData of length: " + nextProps.codeData.length);
+            this.setState({ codeData: nextProps.codeData });
+        }
     }
 
-    find_dimesions(layout){
-        const {x, y, width, height} = layout;
-        console.log("x: " + x);
-        console.log("y: " + y);
-        console.log("width: " + width);
-        console.log("height: " + height);
-      }
+
+    getItemDimensions(layoutEvent) {
+        const { x, y, width, height } = layoutEvent;
+        curItem = this.state.currentItem;
+        console.log("getItemDimensions #" + curItem + " (width, height): (" + width + ", " + height + ")");
+
+        if (curItem > -1) {
+            heightsList.push(height);
+        }
+
+        if (this.state.codeData != null && curItem < this.state.codeData.length - 1) {
+            this.setState({ currentItem: curItem + 1 });
+        } else if (curItem == -1) {
+            this.setState({ currentItem: curItem + 1 });
+        } else if (this.state.codeData != null && curItem == this.state.codeData.length - 1 && curItem != -1) {
+            console.log("DummyMainItem heightsList.length: " + heightsList.length);
+            this.sendDimensionsList();
+        }
+    }
+
+    sendDimensionsList() {
+        this.props.sendDimensionsList(heightsList);
+    }
 
     render() {
-        const item = this.props.nextItem;
-        switch (item.type) {
-            case '0':
-                // console.log("Case 0");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_0}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '1':
-                // console.log("Case 1");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_1}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '2':
-                // console.log("Case 2");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_2}>{item.section}</Text>
-                                <Text style={styles.fullText_2}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '3':
-                // console.log("Case 3");
 
-                var subNumber = "";
+        if (this.state.codeData != null && this.state.currentItem > -1) {
 
-                if (item.pinpoint == "(1)") {
-                    subNumber = "" + item.section + item.pinpoint;
-                } else {
-                    subNumber = item.pinpoint;
+                var item = this.state.codeData[this.state.currentItem];
+
+
+                console.log("Dummy Rendering item #" + this.state.currentItem);
+                console.log(" type: " + item.type);
+
+                switch (item.type) {
+                    case '0':
+                        console.log("Dummy Case 0 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View>
+                                        <Text style={styles.fullText_0}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+
+                    case '1':
+                        console.log("Dummy Case 1 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View>
+                                        <Text style={styles.fullText_1}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '2':
+                        console.log("Dummy Case 2 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_2}>{item.section}</Text>
+                                        <Text style={styles.fullText_2}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '3':
+                        console.log("Dummy Case 3 FULLTEXT: " + item.fulltext);
+
+                        var subNumber = "";
+
+                        if (item.pinpoint == "(1)") {
+                            subNumber = "" + item.section + item.pinpoint;
+                        } else {
+                            subNumber = item.pinpoint;
+                        }
+
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_3}>{subNumber}</Text>
+                                        <Text style={styles.fullText_3}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '4':
+                        console.log("Dummy Case 4 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_4}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '5':
+                        console.log("Dummy Case 5 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_5}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '6':
+                        console.log("Dummy Case 6 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_6}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_6}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '7':
+                        console.log("Dummy Case 7 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_7}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_7}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '8':
+                        console.log("Dummy Case 8 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_8}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '9':
+                        console.log("Dummy Case 9 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_9}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '10':
+                        console.log("Dummy Case 10 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_10}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '11':
+                        console.log("Dummy Case 11 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_11}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '12':
+                        console.log("Dummy Case 12 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_12}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '13':
+                        console.log("Dummy Case 13 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_13}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '14':
+                        console.log("Dummy Case 14 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_14}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '15':
+                        console.log("Dummy Case 15 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_15}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_15}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '16':
+                        console.log("Dummy Case 16 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_16}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '17':
+                        console.log("Dummy Case 17 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_17}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_17}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '18':
+                        console.log("Dummy Case 18 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_18}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '19':
+                        console.log("Dummy Case 19 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
+                                        <Text style={styles.fullText_19}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '20':
+                        console.log("Dummy Case 20 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_20}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    case '21':
+                        console.log("Dummy Case 21 FULLTEXT: " + item.fulltext);
+                        return (
+                            <TouchableOpacity>
+                                <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={styles.fullText_21}>{item.fulltext}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+
+                    default:
+                        return (
+                            <TouchableOpacity>
+                                <View>
+                                    <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
+                                        <Text>{item.type} {item.fulltext} </Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
                 }
-
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
+            } else {
+            console.log("Dummy Case Blank Render");
+            return (
+                <TouchableOpacity>
+                    <View onLayout={(event) => { this.getItemDimensions(event.nativeEvent.layout) }} key={this.state.currentItem}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_3}>{subNumber}</Text>
-                                <Text style={styles.fullText_3}>{item.fulltext}</Text>
-                            </View>
+                            <Text> </Text>
                         </View>
-                    </TouchableOpacity>
-                );
-            case '4':
-                // console.log("Case 4");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_4}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '5':
-                // console.log("Case 5");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_5}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '6':
-                // console.log("Case 6");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_6}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_6}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '7':
-                // console.log("Case 7");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_7}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_7}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '8':
-                // console.log("Case 8");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_8}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '9':
-                // console.log("Case 9");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_9}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '10':
-                // console.log("Case 10");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_10}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '11':
-                // console.log("Case 11");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_11}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '12':
-                // console.log("Case 12");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_12}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '13':
-                // console.log("Case 13");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_13}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '14':
-                // console.log("Case 14");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_14}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '15':
-                console.log("Case 15");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_15}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_15}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '16':
-                console.log("Case 16");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_16}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '17':
-                console.log("Case 17");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_17}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_17}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '18':
-                console.log("Case 18");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_18}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '19':
-                console.log("Case 19");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
-                                <Text style={styles.fullText_19}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '20':
-                console.log("Case 20");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_20}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-            case '21':
-                console.log("Case 21");
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.fullText_21}>{item.fulltext}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
-
-            default:
-                return (
-                    <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View>
-                            <View>
-                                <Text>{item.type} {item.fulltext} </Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                );
+                    </View>
+                </TouchableOpacity>
+            )
         }
+
     }
 
 
@@ -424,4 +462,4 @@ const styles = StyleSheet.create({
     }
 });
 
-AppRegistry.registerComponent('MainItem', () => MainItem);
+AppRegistry.registerComponent('DummyMainItem', () => DummyMainItem);

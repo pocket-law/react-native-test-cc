@@ -14,7 +14,8 @@ export default class MainActivity extends Component {
         this.state = {
             isVisible: 'full-list', // 'full-list', 'headers', 'search'
             searchTerm: '',
-            mainIndexSet: ''
+            mainIndexSet: '',
+            appIsLoaded: 1
         };
     }
 
@@ -81,55 +82,63 @@ export default class MainActivity extends Component {
             console.log("MainActivity RENDER search: " + this.state.searchTerm);
         }
 
-        return (
-            <View style={styles.container}>
-                <View style={styles.titleBar}>
-                    <TitleBar
-                        changeListView={this.handleListView.bind(this)}
-                        isVisible={this.state.isVisible}
-                        searchTerm={this.state.searchTerm}
-                        searchFor={this.handleSearch.bind(this)} />
+        if (this.state.appIsLoaded == 1) {
+
+            return (
+                <View style={styles.container}>
+                    <View style={styles.titleBar}>
+                        <TitleBar
+                            changeListView={this.handleListView.bind(this)}
+                            isVisible={this.state.isVisible}
+                            searchTerm={this.state.searchTerm}
+                            searchFor={this.handleSearch.bind(this)} />
+                    </View>
+                    <View style={styles.bodyView}>
+                        {this.state.isVisible == 'full-list' ?
+                            <View>
+                                <MainFlatList
+                                    mainIndexSet={this.state.mainIndexSet} />
+                            </View>
+                            :
+                            <View style={styles.noHeight}>
+                                <MainFlatList
+                                    mainIndexSet={this.state.mainIndexSet} />
+                            </View>
+                        }
+                        {this.state.isVisible == 'headers' ?
+                            <View>
+                                <HeadsFlatList
+                                    setMainIndex={this.setMainIndex.bind(this)} />
+                            </View>
+                            :
+                            <View style={styles.noHeight}>
+                                <HeadsFlatList
+                                    setMainIndex={this.setMainIndex.bind(this)} />
+                            </View>
+                        }
+                        {this.state.isVisible == 'search' ?
+                            <View>
+                                <SearchFlatList
+                                    searchTerm={this.state.searchTerm}
+                                    setMainIndex={this.setMainIndex.bind(this)} />
+                            </View>
+                            :
+                            <View style={styles.noHeight}>
+                                <SearchFlatList
+                                    searchTerm={this.state.searchTerm}
+                                    setMainIndex={this.setMainIndex.bind(this)} />
+                            </View>
+                        }
+                    </View>
+                    <View style={styles.footer} />
                 </View>
-                <View style={styles.bodyView}>
-                    {this.state.isVisible == 'full-list' ?
-                        <View>
-                            <MainFlatList
-                                mainIndexSet={this.state.mainIndexSet} />
-                        </View>
-                        :
-                        <View style={styles.noHeight}>
-                            <MainFlatList
-                                mainIndexSet={this.state.mainIndexSet} />
-                        </View>
-                    }
-                    {this.state.isVisible == 'headers' ?
-                        <View>
-                            <HeadsFlatList
-                                setMainIndex={this.setMainIndex.bind(this)} />
-                        </View>
-                        :
-                        <View style={styles.noHeight}>
-                            <HeadsFlatList
-                                setMainIndex={this.setMainIndex.bind(this)} />
-                        </View>
-                    }
-                    {this.state.isVisible == 'search' ?
-                        <View>
-                            <SearchFlatList
-                                searchTerm={this.state.searchTerm}
-                                setMainIndex={this.setMainIndex.bind(this)} />
-                        </View>
-                        :
-                        <View style={styles.noHeight}>
-                            <SearchFlatList 
-                                searchTerm={this.state.searchTerm} 
-                                setMainIndex={this.setMainIndex.bind(this)} />
-                        </View>
-                    }
-                </View>
-                <View style={styles.footer} />
-            </View>
-        );
+            );
+        } else {
+            return (
+                <MainFlatList
+                    mainIndexSet={this.state.mainIndexSet} />
+            )
+        }
     }
 }
 

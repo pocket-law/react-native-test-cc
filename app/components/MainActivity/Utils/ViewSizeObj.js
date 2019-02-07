@@ -1,6 +1,6 @@
 export const viewSize = {
-    id,
-    height,
-    offset
+    id: 0,
+    height: 0,
+    offset: 0
 }
 

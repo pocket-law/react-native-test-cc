@@ -6,10 +6,13 @@ import Database from '../Utils/Database'
 
 import MainItem from './ListItems/MainItem';
 
+import DummyMainItem from './ListItems/DummyMainItem';
+
 // This variable is used to avoid searching again when clicking the hamburger menu after a search
 const lastSearch = '';
 
-var FLOATING_OFFSET = 0;
+var ITEM_HEIGHTS_LIST = [];
+var FLOATING_OFFSET_LIST = [];
 
 
 export default class MainFlatList extends Component {
@@ -19,7 +22,8 @@ export default class MainFlatList extends Component {
             mainDataSource: [],
             resultsArray: [],
             indexSet: 0,
-            searchTerm: ''
+            searchTerm: '',
+            viewHeightsReady: 0, // set to 1 after list of heights is returned from DummyMainItem
         };
 
         var db = Database.getConnection();
@@ -42,7 +46,7 @@ export default class MainFlatList extends Component {
             });
         });
 
-        
+
 
     }
 
@@ -56,25 +60,50 @@ export default class MainFlatList extends Component {
         }
     }
 
+    recieveDimensionsList(dimensionsList) {
+        console.log("MainFlatList dimensions list length: " + dimensionsList.length)
+
+        ITEM_HEIGHTS_LIST = dimensionsList;
+
+        for (i = 0; i < dimensionsList.length; i++) {
+            if (i > 0) {
+                FLOATING_OFFSET_LIST.push(FLOATING_OFFSET_LIST[i-1] + dimensionsList[i])
+            } else {
+                FLOATING_OFFSET_LIST.push(0)
+            }
+        }
+
+        this.setState({ viewHeightsReady: 1 });
+
+    }
+
 
     render() {
-        return (
-            <FlatList
-                data={this.state.mainDataSource}
-                ref={(ref) => { this.flatListRef = ref; }}
-                renderItem={this._renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                initialNumToRender={30}
-                getItemLayout={this._getItemLayout}
-                extraData={this.props}
-                removeClippedSubviews={false} />
-        );
+        if (this.state.viewHeightsReady == 0) {
+            return (
+                <DummyMainItem
+                    codeData={this.state.mainDataSource}
+                    sendDimensionsList={this.recieveDimensionsList.bind(this)} />
+            )
+        } else {
+            return (
+                <FlatList
+                    data={this.state.mainDataSource}
+                    ref={(ref) => { this.flatListRef = ref; }}
+                    renderItem={this._renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    initialNumToRender={30}
+                    getItemLayout={this._getItemLayout}
+                    extraData={this.props}
+                    removeClippedSubviews={false} />
+            );
+        }
     }
 
     _getItemLayout = (data, index) => (
-        { 
-            length: 50, 
-            offset: 50 * index, 
+        {
+            length: ITEM_HEIGHTS_LIST[index],
+            offset: FLOATING_OFFSET_LIST[index],
             index,
         }
     )
