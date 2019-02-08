@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View, StyleSheet, TouchableHighlight, Keyboard, BackHandler } from 'react-native';
 
+import RecycleTestComponent from './components/MainActivity/ListView/RecycleTestComponent';
 import MainFlatList from './components/MainActivity/ListView/MainFlatList';
 import HeadsFlatList from './components/MainActivity/ListView/HeadsFlatList';
 import SearchFlatList from './components/MainActivity/ListView/SearchFlatList';
@@ -95,14 +96,18 @@ export default class MainActivity extends Component {
                     </View>
                     <View style={styles.bodyView}>
                         {this.state.isVisible == 'full-list' ?
-                            <View>
-                                <MainFlatList
-                                    mainIndexSet={this.state.mainIndexSet} />
+                            <View style={{ flex: 1 }}>
+                                {/* <MainFlatList
+                                    mainIndexSet={this.state.mainIndexSet} /> */}
+
+                                <RecycleTestComponent />
                             </View>
                             :
                             <View style={styles.noHeight}>
-                                <MainFlatList
-                                    mainIndexSet={this.state.mainIndexSet} />
+                                {/* <MainFlatList
+                                    mainIndexSet={this.state.mainIndexSet} /> */}
+
+                                <RecycleTestComponent />
                             </View>
                         }
                         {this.state.isVisible == 'headers' ?

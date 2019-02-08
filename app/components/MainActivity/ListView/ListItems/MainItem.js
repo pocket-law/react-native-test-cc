@@ -24,15 +24,25 @@ export default class MainItem extends PureComponent {
         console.log("height: " + height);
     }
 
+    componentWillReceiveProps() {
+        console.log("MainItem props");
+    }
+
     render() {
+
         const item = this.props.nextItem;
+        const screenWidth = this.props.screenWidth;
+
+        console.log("MainItem render: " + item.fulltext + " Width: " + screenWidth);
+
+
         switch (item.type) {
             case '0':
                 // console.log("Case 0");
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
-                        <View onLayout={(event) => { this.find_dimesions(event.nativeEvent.layout) }}>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View>
+                            <View style={{ flexDirection: 'row', width: screenWidth, width: screenWidth }}>
                                 <Text style={styles.fullText_0}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -43,7 +53,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_1}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -54,7 +64,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_2}>{item.section}</Text>
                                 <Text style={styles.fullText_2}>{item.fulltext}</Text>
                             </View>
@@ -75,7 +85,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_3}>{subNumber}</Text>
                                 <Text style={styles.fullText_3}>{item.fulltext}</Text>
                             </View>
@@ -87,7 +97,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_4}>{item.fulltext}</Text>
                             </View>
@@ -99,7 +109,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_5}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -110,7 +120,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_6}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_6}>{item.fulltext}</Text>
                             </View>
@@ -122,7 +132,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_7}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_7}>{item.fulltext}</Text>
                             </View>
@@ -134,7 +144,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_8}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -145,7 +155,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_9}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -156,7 +166,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_10}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -167,7 +177,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_11}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -178,7 +188,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_12}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -189,7 +199,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_13}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -200,7 +210,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_14}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -211,7 +221,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_15}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_15}>{item.fulltext}</Text>
                             </View>
@@ -223,7 +233,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_16}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -234,7 +244,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_17}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_17}>{item.fulltext}</Text>
                             </View>
@@ -246,7 +256,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_18}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -257,7 +267,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.pinpoint_4}>{item.pinpoint}</Text>
                                 <Text style={styles.fullText_19}>{item.fulltext}</Text>
                             </View>
@@ -269,7 +279,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_20}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -280,7 +290,7 @@ export default class MainItem extends PureComponent {
                 return (
                     <TouchableOpacity onLongPress={() => this.readText(item.fulltext)}>
                         <View>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View style={{ flexDirection: 'row', width: screenWidth }}>
                                 <Text style={styles.fullText_21}>{item.fulltext}</Text>
                             </View>
                         </View>
@@ -307,14 +317,17 @@ export default class MainItem extends PureComponent {
 const styles = StyleSheet.create({
     fullText_0: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingRight: 8
     },
     fullText_1: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingRight: 8
     },
     fullText_2: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_2: {
         fontSize: 14,
@@ -322,6 +335,7 @@ const styles = StyleSheet.create({
     },
     fullText_3: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_3: {
         fontSize: 14,
@@ -329,84 +343,100 @@ const styles = StyleSheet.create({
     },
     fullText_4: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_4: {
-        paddingLeft: 20,
+        marginLeft: 20,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_5: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_6: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_6: {
-        paddingLeft: 20,
+        marginLeft: 20,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_7: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_7: {
-        paddingLeft: 44,
+        marginLeft: 44,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_8: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_8: {
-        paddingLeft: 44,
+        marginLeft: 44,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_9: {
         fontSize: 10,
+        paddingRight: 8
     },
     fullText_10: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingRight: 8
     },
     fullText_11: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_12: {
-        paddingLeft: 16,
+        marginLeft: 16,
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_13: {
-        paddingLeft: 20,
+        marginLeft: 20,
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_14: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_15: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_15: {
-        paddingLeft: 68,
+        marginLeft: 68,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_16: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_17: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_17: {
-        paddingLeft: 92,
+        marginLeft: 92,
         fontSize: 14,
         fontWeight: 'bold'
     },
     fullText_18: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_19: {
         fontSize: 14,
+        paddingRight: 8
     },
     pinpoint_17: {
         fontSize: 14,
@@ -414,9 +444,11 @@ const styles = StyleSheet.create({
     },
     fullText_20: {
         fontSize: 14,
+        paddingRight: 8
     },
     fullText_21: {
         fontSize: 14,
+        paddingRight: 8
     }
 });
 
